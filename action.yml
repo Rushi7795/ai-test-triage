@@ -1,0 +1,62 @@
+name: 'AI Test Triage'
+description: 'Turns failing CI test reports into a plain-English triage summary using Claude. Works with any runner that emits JUnit XML.'
+author: 'Rushi Prajapati'
+
+branding:
+  icon: 'activity'
+  color: 'orange'
+
+inputs:
+  anthropic-api-key:
+    description: 'Anthropic API key. Without it the action posts a plain list of failures instead of an AI summary.'
+    required: false
+    default: ''
+  report-paths:
+    description: 'Comma-separated globs pointing at JUnit XML reports.'
+    required: false
+    default: '**/surefire-reports/*.xml,**/test-results/**/*.xml,**/junit*.xml'
+  model:
+    description: 'Claude model to use.'
+    required: false
+    default: 'claude-sonnet-5'
+  context:
+    description: 'Optional one-line description of the project, to sharpen the triage.'
+    required: false
+    default: ''
+  max-failures:
+    description: 'Maximum number of failures to send for analysis.'
+    required: false
+    default: '20'
+  comment-on-pr:
+    description: 'Post the triage as a pull request comment. Needs permissions: pull-requests: write.'
+    required: false
+    default: 'true'
+
+outputs:
+  triaged:
+    description: 'true when an AI summary was produced.'
+    value: ${{ steps.triage.outputs.triaged }}
+  summary:
+    description: 'The Markdown triage summary.'
+    value: ${{ steps.triage.outputs.summary }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Run AI test triage
+      id: triage
+      shell: bash
+      run: python3 "$GITHUB_ACTION_PATH/triage.py"
+      env:
+        INPUT_ANTHROPIC_API_KEY: ${{ inputs.anthropic-api-key }}
+        INPUT_REPORT_PATHS: ${{ inputs.report-paths }}
+        INPUT_MODEL: ${{ inputs.model }}
+        INPUT_CONTEXT: ${{ inputs.context }}
+        INPUT_MAX_FAILURES: ${{ inputs.max-failures }}
+        INPUT_COMMENT_ON_PR: ${{ inputs.comment-on-pr }}
+        GITHUB_TOKEN: ${{ github.token }}
