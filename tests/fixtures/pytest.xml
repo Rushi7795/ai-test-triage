@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+  <testsuite name="pytest" errors="1" failures="1" skipped="1" tests="4" time="0.42">
+    <testcase classname="tests.test_api" name="test_health" time="0.01"/>
+    <testcase classname="tests.test_api" name="test_timeout" time="0.30">
+      <error message="ConnectionError: timed out">requests.exceptions.ConnectionError: timed out</error>
+    </testcase>
+    <testcase classname="tests.test_math" name="test_sum" time="0.02">
+      <failure message="assert 4 == 5">E  assert 4 == 5</failure>
+    </testcase>
+    <testcase classname="tests.test_math" name="test_slow" time="0.0">
+      <skipped message="needs network"/>
+    </testcase>
+  </testsuite>
+</testsuites>

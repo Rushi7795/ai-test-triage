@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="TestSuite" time="17.41" tests="3" errors="0" skipped="0" failures="1">
+  <testcase name="validLoginShowsInventory" classname="com.rushi.aitest.tests.LoginTest" time="6.1"/>
+  <testcase name="lockedOutUserSeesError" classname="com.rushi.aitest.tests.LoginTest" time="5.2"/>
+  <testcase name="selfHealingRecoversBrokenLocator" classname="com.rushi.aitest.tests.LoginTest" time="6.0">
+    <failure message="Element not found: By.id: btn-login-submit-OLD (the login submit button)." type="org.openqa.selenium.NoSuchElementException">
+org.openqa.selenium.NoSuchElementException: Element not found: By.id: btn-login-submit-OLD
+	at com.rushi.aitest.core.SmartDriver.find(SmartDriver.java:88)
+	at com.rushi.aitest.core.SmartDriver.click(SmartDriver.java:101)
+    </failure>
+  </testcase>
+</testsuite>
