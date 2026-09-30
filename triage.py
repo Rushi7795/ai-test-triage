@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.request
@@ -41,6 +42,7 @@ Rules:
   - If the evidence is thin, say so and classify as UNCLEAR.
   - Do not repeat full stack traces back; reference them briefly.
   - Use plain hyphens only. Never use em dashes or en dashes.
+  - Put code names (classes, methods, fields, annotations such as @BeforeEach) in backticks.
 """
 
 
@@ -73,7 +75,7 @@ def call_claude(api_key: str, model: str, prompt: str, max_tokens: int) -> str:
 
     blocks = payload.get("content", [])
     text = "".join(b.get("text", "") for b in blocks if b.get("type") == "text")
-    return plain_dashes(text.strip())
+    return no_mentions(plain_dashes(text.strip()))
 
 
 def plain_dashes(text: str) -> str:
@@ -81,6 +83,18 @@ def plain_dashes(text: str) -> str:
     for dash in ("\u2014", "\u2013"):
         text = text.replace(f" {dash} ", " - ").replace(dash, " - ")
     return text
+
+
+def no_mentions(text: str) -> str:
+    """Wrap stray @words in backticks so GitHub does not treat them as user mentions.
+
+    Text already inside code spans or code blocks is left alone, and email
+    addresses are not touched (the @ must not follow a letter or digit).
+    """
+    parts = re.split(r"(```[\s\S]*?```|`[^`\n]*`)", text)
+    for i in range(0, len(parts), 2):  # even indexes are outside code
+        parts[i] = re.sub(r"(?<![\w`@/])@([A-Za-z][\w-]*)", r"`@\1`", parts[i])
+    return "".join(parts)
 
 
 def build_prompt(summary: RunSummary, context: str) -> str:
