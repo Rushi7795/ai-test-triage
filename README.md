@@ -9,6 +9,12 @@ This action does that first pass for you. It reads your JUnit XML reports, sends
 
 For each failure you get a likely cause, a classification (**PRODUCT BUG**, **TEST BUG**, **ENVIRONMENT/FLAKY** or **UNCLEAR**), and a suggested next step. Then a two-line summary for whoever has thirty seconds.
 
+## See it in action
+
+<img width="700" alt="triage-comment" src="https://github.com/user-attachments/assets/3583aee1-f966-45ec-8ed4-a31bfd81bb48" />
+
+No failing tests of your own? The [example project](https://github.com/Rushi7795/ai-test-triage-example) has 4 tests that fail on purpose, each for a different reason. Open the [demo pull request](https://github.com/Rushi7795/ai-test-triage-example/pull/1) to see the triage comment without any setup, or fork it and run it yourself.
+
 ---
 
 ## Usage
