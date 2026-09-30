@@ -40,6 +40,7 @@ Rules:
   - Never invent file names, line numbers, or causes that are not evidenced.
   - If the evidence is thin, say so and classify as UNCLEAR.
   - Do not repeat full stack traces back; reference them briefly.
+  - Use plain hyphens only. Never use em dashes or en dashes.
 """
 
 
@@ -72,7 +73,14 @@ def call_claude(api_key: str, model: str, prompt: str, max_tokens: int) -> str:
 
     blocks = payload.get("content", [])
     text = "".join(b.get("text", "") for b in blocks if b.get("type") == "text")
-    return text.strip()
+    return plain_dashes(text.strip())
+
+
+def plain_dashes(text: str) -> str:
+    """Replace em and en dashes with a plain hyphen, in case the model uses them."""
+    for dash in ("\u2014", "\u2013"):
+        text = text.replace(f" {dash} ", " - ").replace(dash, " - ")
+    return text
 
 
 def build_prompt(summary: RunSummary, context: str) -> str:
