@@ -9,6 +9,8 @@ This action does that first pass for you. It reads your JUnit XML reports, sends
 
 For each failure you get a likely cause, a classification (**PRODUCT BUG**, **TEST BUG**, **ENVIRONMENT/FLAKY** or **UNCLEAR**), and a suggested next step. Then a two-line summary for whoever has thirty seconds.
 
+Try it in your browser: https://famingu.com/demos/test-triage - built by FamingU, QA test automation services: https://famingu.com/services/qa-test-automation
+
 ## See it in action
 
 <img width="700" alt="triage-comment" src="https://github.com/user-attachments/assets/3583aee1-f966-45ec-8ed4-a31bfd81bb48" />
